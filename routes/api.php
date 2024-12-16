@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StudentsController;
+use App\Http\Controllers\CustomerController;
 
 
 /*
@@ -27,3 +28,13 @@ Route::get('/students/{id}', [StudentsController::class, 'show']);
 Route::get('/students/{id}/edit', [StudentsController::class, 'edit']);
 Route::put('/students/{id}/update', [StudentsController::class, 'update']);
 Route::delete('/students/{id}/delete', [StudentsController::class, 'destroy']);
+
+
+
+
+Route::get('/customers', [CustomerController::class, 'index']);
+Route::post('/create-customer', [CustomerController::class, 'store']);
+Route::delete('/customers/{id}/delete', [CustomerController::class, 'destroy']);
+Route::get('/customers/{id}/view', [CustomerController::class, 'show']);
+Route::get('/customers/{id}/edit', [CustomerController::class, 'edit']);
+Route::put('/customers/{id}/update', [CustomerController::class, 'update']);

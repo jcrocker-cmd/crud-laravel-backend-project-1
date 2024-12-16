@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Students;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use DB;
-use Validator;
+
 
 class StudentsController extends Controller
 {
@@ -21,13 +22,14 @@ class StudentsController extends Controller
                 'students' => $students
             ], 200);
         } else {
-            return response()->json([
-                'status' => 404,
-                'students' => 'No Records Found'
-            ], 404
-        );
+            return response()->json(
+                [
+                    'status' => 404,
+                    'students' => 'No Records Found'
+                ],
+                404
+            );
         }
-        
     }
 
     /**
@@ -43,11 +45,10 @@ class StudentsController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(),[
+        $validator = Validator::make($request->all(), [
             'name' => 'required|max:191',
-            'course' => 'required|max:191',
             'email' => 'required|email|max:191',
-            'phone' => 'required|max:20|min:8',
+            'content' => 'required|max:20|min:8',
         ]);
 
         if ($validator->fails()) {
@@ -56,27 +57,24 @@ class StudentsController extends Controller
                 'errors' => $validator->messages()
             ], 422);
         } else {
-           $students = Students::create([
+            $students = Students::create([
                 'name' => $request->name,
-                'course' => $request->course,
                 'email' => $request->email,
-                'phone' => $request->phone,
-           ]);
+                'content' => $request->content,
+            ]);
 
-           if ($students) {
-            return response()->json([
-                'status' => 200,
-                'message' => 'Student Added Succesfully'
-            ], 200);
-           } else {
-            return response()->json([
-                'status' => 500,
-                'message' => 'Something Went Wrong',
-            ], 500);
-           }
-
+            if ($students) {
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Student Added Succesfully'
+                ], 200);
+            } else {
+                return response()->json([
+                    'status' => 500,
+                    'message' => 'Something Went Wrong',
+                ], 500);
+            }
         }
-        
     }
 
     /**
@@ -96,7 +94,6 @@ class StudentsController extends Controller
                 'message' => "No Such Student Found"
             ], 404);
         }
-        
     }
 
     /**
@@ -123,7 +120,7 @@ class StudentsController extends Controller
      */
     public function update(Request $request, int $id)
     {
-        $validator = Validator::make($request->all(),[
+        $validator = Validator::make($request->all(), [
             'name' => 'required|max:191',
             'course' => 'required|max:191',
             'email' => 'required|email|max:191',
@@ -136,28 +133,27 @@ class StudentsController extends Controller
                 'errors' => $validator->messages()
             ], 422);
         } else {
-           $student = Students::find($id);
+            $student = Students::find($id);
 
-           if ($student) {
+            if ($student) {
 
-            $student->update([
-                'name' => $request->name,
-                'course' => $request->course,
-                'email' => $request->email,
-                'phone' => $request->phone,
-           ]);
+                $student->update([
+                    'name' => $request->name,
+                    'course' => $request->course,
+                    'email' => $request->email,
+                    'phone' => $request->phone,
+                ]);
 
-            return response()->json([
-                'status' => 200,
-                'message' => 'Student Edited Succesfully'
-            ], 200);
-           } else {
-            return response()->json([
-                'status' => 404,
-                'message' => 'No Student Found',
-            ], 404);
-           }
-
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Student Edited Succesfully'
+                ], 200);
+            } else {
+                return response()->json([
+                    'status' => 404,
+                    'message' => 'No Student Found',
+                ], 404);
+            }
         }
     }
 
@@ -181,6 +177,5 @@ class StudentsController extends Controller
                 'message' => 'No Student Found',
             ], 404);
         }
-        
     }
 }
